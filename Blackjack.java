@@ -18,7 +18,7 @@ public class Blackjack {
 
         System.out.println("\n You get a \n" + cardString(card1) + "\n and a \n" + cardString(card2));
 
-        int totalValue = Math.min(card1,10) + Math.min(card2,10);
+        int totalValue = Math.min(card1, 10) + Math.min(card2, 10);
         System.out.println(totalValue);
 
 
@@ -27,27 +27,58 @@ public class Blackjack {
 
 
         System.out.println("\nThe dealer shows \n" + cardString(dealerCard1) + "\nand has a card facing down\n " + faceDown());
-        int dealerTotal = Math.min(dealerCard1,10) + Math.min(dealerCard2, 10);
+        int dealerTotal = Math.min(dealerCard1, 10) + Math.min(dealerCard2, 10);
         System.out.println("\nThe dealer's total is hidden");
 
-        String option = hitOrStay();
+
+        while (true) {
+            String option = hitOrStay();
+            if (option.equals("stay")) {
+                break;
+            }
+
+            int newCard = drawRandomCard();
+            totalValue += Math.min(newCard, 10);
+            System.out.println("\nYou get a \n" + cardString(newCard));
+            System.out.println("Your total is: " + totalValue);
+
+            if (totalValue > 21) {
+                System.out.println("Bust! Player Loses");
+                System.exit(0);
+            }
+        }
+        System.out.println("\nDealer's turn");
+        System.out.println("\n the dealer's cards are \n" + cardString(dealerCard1) + "\n and a \n" + cardString(dealerCard2));
+        System.out.println("Dealer's total is " + dealerTotal);
 
 
-
-        //Task 8 – Keep asking the player to hit or stay (while loop).
-        //       1. Every time the player hits
-        //             – draw a new card.
-        //             – calculate their new total.
-        //             – print: (new line) You get a (new line) <show new card>.
-        //             - print: your new total is <total>
-
-        //       2. Once the player stays, break the loop. 
+        while(dealerTotal < 17){
+            int newCard = drawRandomCard();
+            dealerTotal += Math.min(newCard, 10);
+            System.out.println("\n Dealer gets a \n" +cardString(newCard));
+            System.out.println("Dealer's total is " + dealerTotal);
 
 
-        //For tasks 9 to 13, see the article: Blackjack Part II. 
+        }
+
+        if(dealerTotal > 21){
+            System.out.println("Bust Dealer Loses!");
+            System.exit(0);
+        }
+
+        if(totalValue > dealerTotal){
+            System.out.println("Player Wins!");
+            System.exit(0);
+        } else{
+            System.out.println("Computer Wins");
+            System.exit(0);
+        }
+
+
         scan.close();
 
     }
+
 
 
 
@@ -55,18 +86,6 @@ public class Blackjack {
         int randomNumber = (int) Math.floor(Math.random() * 13 + 1);
         return randomNumber;
     }
-
-
-    /**
-     * Task 2 – make a function that returns a String drawing of the card.
-     * Function name – cardString
-     *
-     * @param cardNumber (int)
-     * @return (String)
-     * <p>
-     * Inside the function:
-     * 1. Returns a String drawing of the card.
-     */
 
 
     public static String cardString(int cardNumber) {
@@ -191,23 +210,13 @@ public class Blackjack {
                         "  |_____|\n";
     }
 
-    /** Task 7 – make a function that asks the user to hit or stay.
-     * Function name – hitOrStay
-     * @return (String)
-     *
-     * Inside the function:
-     *   1. Asks the user to hit or stay.
-     *   2. If the user doesn't enter "hit" or "stay", keep asking them to try again by printing:
-     *      Please write 'hit' or 'stay'
-     *   3. Returns the user's option 
-     */
 
     public static String hitOrStay() {
         System.out.println("Would you like to hit or stay");
         String response = scan.nextLine();
 
 
-        while(!(response.equalsIgnoreCase("hit") || response.equalsIgnoreCase("stay"))){
+        while (!(response.equalsIgnoreCase("hit") || response.equalsIgnoreCase("stay"))) {
             System.out.println("Please write hit or stay");
             response = scan.nextLine();
         }
